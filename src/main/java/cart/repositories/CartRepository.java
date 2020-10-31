@@ -10,4 +10,6 @@ import cart.models.Cart;
 @Repository
 public interface CartRepository extends CrudRepository<Cart, Long> {
     Optional<Cart> findByUserId(long userId);
+
+    void deleteByUserId(long userId);
 }
