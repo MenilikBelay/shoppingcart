@@ -12,4 +12,6 @@ public interface ShoppingCartService {
     public Cart getCartByUserId(long userId);
 
     public void removeFromCart(long userId, Product product);
+
+    public void clearCart(long userId);
 }

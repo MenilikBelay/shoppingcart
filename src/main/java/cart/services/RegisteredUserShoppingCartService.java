@@ -44,4 +44,9 @@ public class RegisteredUserShoppingCartService implements ShoppingCartService {
             cartRepository.save(cart);
         }
     }
+
+    @Override
+    public void clearCart(long userId) {
+        cartRepository.deleteByUserId(userId);
+    }
 }
