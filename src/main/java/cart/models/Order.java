@@ -30,7 +30,7 @@ public class Order {
     private long id;
     private Long userId; // can be null for guest user
     private OrderStatus status = OrderStatus.PENDING; // by default it's pending
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private final Date timestamp = new Date();
     @Embedded
     @AttributeOverrides({ @AttributeOverride(name = "street1", column = @Column(name = "billing_street1")),
