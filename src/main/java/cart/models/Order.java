@@ -29,6 +29,7 @@ public class Order {
     @GeneratedValue
     private long id;
     private Long userId; // can be null for guest user
+    private final String userEmail; // needed for both registered and unregistered users
     private OrderStatus status = OrderStatus.PENDING; // by default it's pending
     @Temporal(TemporalType.DATE)
     private final Date timestamp = new Date();
@@ -51,6 +52,8 @@ public class Order {
     @ElementCollection
     @CollectionTable(name = "ordered_products")
     private Set<OrderedProduct> products;
+    @Embedded
+    private CardInformation paymentCard;
 
     public static enum OrderStatus {
         PENDING, ORDERED, DELIVERED
