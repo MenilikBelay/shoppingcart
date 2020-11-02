@@ -7,10 +7,13 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @Data
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class CardInformation {
     @Column(name = "cardHolderName")
     private final String name;
