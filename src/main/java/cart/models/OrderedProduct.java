@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Lob;
 
 import lombok.AccessLevel;
 
@@ -16,6 +17,7 @@ public class OrderedProduct {
     private Double price;
     private final long vendorId;
     private final String imageURL;
+    @Lob
     private final String description;
     private final String productName;
     private final long productId;
