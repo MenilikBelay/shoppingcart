@@ -22,4 +22,8 @@ public class OrderInvoice {
         this.userEmail = userEmail;
         this.payTo = payTo;
     }
+
+    public String toString() {
+        return orderId + " " + userEmail;
+    }
 }

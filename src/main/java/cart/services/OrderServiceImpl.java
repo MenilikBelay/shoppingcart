@@ -2,11 +2,13 @@ package cart.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -54,13 +56,15 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Generate the invoice from the given order
+     * 
      * @param order
      * @return
      */
     private OrderInvoice generateInvoice(Order order) {
         List<IndividualProductOrderInformation> orderInfo = new ArrayList<>();
         for (OrderedProduct product : order.getProducts()) {
-            orderInfo.add(new IndividualProductOrderInformation(product.getPrice(), product.getProductId(), product.getQuantity()));
+            orderInfo.add(new IndividualProductOrderInformation(product.getPrice(), product.getProductId(),
+                    product.getQuantity()));
         }
         return new OrderInvoice(order.getPaymentCard(), order.getId(), order.getUserEmail(), orderInfo);
     }
@@ -72,5 +76,36 @@ public class OrderServiceImpl implements OrderService {
      */
     private void updateConsumers(Order order) {
         producer.send(orderCreatedTopic, generateInvoice(order));
+    }
+
+    public void cancelOrderByOrderId(long orderId) {
+        updateOrderStatus(orderId, Order.OrderStatus.CANCELED);
+    }
+
+    public void orderSuccessful(long orderId) {
+        updateOrderStatus(orderId, Order.OrderStatus.ORDERED);
+    }
+
+    private void updateOrderStatus(long orderId, Order.OrderStatus status) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            // change status
+            Order order = optionalOrder.get();
+            order.setStatus(status);
+            orderRepository.save(order);
+        }
+    }
+
+    @KafkaListener(id = "${cart.services.shopping-cart-and-order-service-order-succeed-listener}", topics = "${cart.services.Order-Succeed}")
+    public void orderSuccessfulListener(Long orderId) {
+        System.out.println("Received Successful Order Id: " + orderId);
+        orderSuccessful(orderId);
+    }
+
+    @KafkaListener(id = "${cart.services.shopping-cart-and-order-service-failed-qty-deduction-listener}", topics = {
+            "${cart.services.Fail-Qty-Deduction}", "${cart.services.Fail-Payment}" })
+    public void orderCanceledListener(Long orderId) {
+        System.out.println("Received Failed Order Id: " + orderId);
+        cancelOrderByOrderId(orderId);
     }
 }

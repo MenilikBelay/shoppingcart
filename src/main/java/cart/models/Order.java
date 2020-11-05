@@ -56,6 +56,6 @@ public class Order {
     private CardInformation paymentCard;
 
     public static enum OrderStatus {
-        PENDING, ORDERED, DELIVERED
+        PENDING, ORDERED, DELIVERED, CANCELED
     };
 }
