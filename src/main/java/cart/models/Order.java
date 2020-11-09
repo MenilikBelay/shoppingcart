@@ -58,4 +58,14 @@ public class Order {
     public static enum OrderStatus {
         PENDING, ORDERED, DELIVERED, CANCELED
     };
+
+    public Order(Long userId, String userEmail, Address billingAddress, Address shippingAddress,
+            Set<OrderedProduct> products, CardInformation paymentCard) {
+        this.userId = userId;
+        this.userEmail = userEmail;
+        this.billingAddress = billingAddress;
+        this.shippingAddress = shippingAddress;
+        this.products = products;
+        this.paymentCard = paymentCard;
+    }
 }

@@ -22,6 +22,15 @@ public class OrderedProduct {
     @NonNull
     private Integer quantity;
 
+    public OrderedProduct (Double price, long vendorId, String imageURL, String description, String productName, long productId) {
+        this.price = price;
+        this.vendorId = vendorId;
+        this.imageURL = imageURL;
+        this.description = description;
+        this.productName = productName;
+        this.productId = productId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null)
