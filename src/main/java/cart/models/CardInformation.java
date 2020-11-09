@@ -23,4 +23,11 @@ public class CardInformation {
     private final String expDate;
     @Digits(integer = 3, fraction = 0, message = "invalid CVV")
     private final String pin; // card validation value
+
+    public CardInformation(String name, String cardNumber, String expDate, String pin) {
+        this.name = name;
+        this.cardNumber = cardNumber;
+        this.expDate = expDate;
+        this.pin = pin;
+    }
 }
